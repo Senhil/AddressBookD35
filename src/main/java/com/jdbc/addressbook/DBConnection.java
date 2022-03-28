@@ -27,7 +27,6 @@ public class DBConnection {
             e.printStackTrace();
         }
     }
-
     private static void listDrivers() {
         Enumeration<Driver> driverList = DriverManager.getDrivers();
         while (driverList.hasMoreElements()) {
@@ -35,4 +34,5 @@ public class DBConnection {
             System.out.println(driverClass.getClass().getName());
         }
     }
+
 }

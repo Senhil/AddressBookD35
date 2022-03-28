@@ -1,4 +1,4 @@
-package com.jdbc.addressbook;
+package com.addressbook.jdbc;
 
 import java.util.Objects;
 
@@ -12,7 +12,8 @@ public class AddressBookData {
     public String state;
     public String zip;
 
-    public AddressBookData(String typeId, String firstName, String lastName, String phoneNumber, String email, String city, String state, String zip) {
+
+    public AddressBookData( String typeId, String firstName, String lastName, String phoneNumber, String email, String city, String state, String zip) {
         this.typeId = typeId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -23,6 +24,21 @@ public class AddressBookData {
         this.zip = zip;
     }
 
+
+
+    @Override
+    public String toString() {
+        return "AddressBookData{" +
+                ", typeId=" + typeId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zip='" + zip + '\'' +
+                '}';
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -38,17 +54,4 @@ public class AddressBookData {
                 Objects.equals(zip, that.zip);
     }
 
-    @Override
-    public String toString() {
-        return "AddressBookData{" +
-                ", typeId=" + typeId +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", email='" + email + '\'' +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", zip='" + zip + '\'' +
-                '}';
-    }
 }
