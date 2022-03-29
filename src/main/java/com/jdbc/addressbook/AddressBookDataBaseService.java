@@ -34,7 +34,7 @@ public class AddressBookDataBaseService
     }
 
     public List<AddressBookData> readDate() {
-        String query = "SELECT * from addressBook";
+        String query = "SELECT * from addressbook";
         return this.getAddressBookDataUsingDB(query);
     }
 
@@ -57,12 +57,13 @@ public class AddressBookDataBaseService
                 String typeId = resultSet.getString("type");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String phoneNumber = resultSet.getString("phoneNumber");
+                String phoneNumber = resultSet.getString("mobileNumber");
                 String email = resultSet.getString("email");
                 String city = resultSet.getString("city");
                 String state = resultSet.getString("state");
                 String zip = resultSet.getString("zip");
-                addressBookList.add(new AddressBookData(typeId, firstName, lastName, phoneNumber, email, city, state, zip));
+                LocalDate date_added = resultSet.getDate("date_added").toLocalDate();
+                addressBookList.add(new AddressBookData(typeId, firstName, lastName, phoneNumber, email, city, state, zip, date_added));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,7 +95,7 @@ public class AddressBookDataBaseService
     }
 
     public int updateAddressBookRecord(String name, String phoneNumber) throws AddressBookException {
-        String query = String.format("update addressBook set mobileNumber = '%s' where firstName= '%s' ;", phoneNumber, name);
+        String query = String.format("update addressbook set mobileNumber = '%s' where firstName= '%s' ;", phoneNumber, name);
         try (Connection connection = this.getConnection()) {
             Statement statement = connection.createStatement();
             return statement.executeUpdate(query);
@@ -103,12 +104,12 @@ public class AddressBookDataBaseService
         }
     }
     public List<AddressBookData> getEmployeePayrollForDateRange(LocalDate startDate, LocalDate endDate) {
-        String query = String.format("SELECT * FROM addressBook WHERE date_added BETWEEN '%s' AND '%s';",
+        String query = String.format("SELECT * FROM addressbook WHERE date_added BETWEEN '%s' AND '%s';",
                 Date.valueOf(startDate), Date.valueOf(endDate));
         return this.getAddressBookDataUsingDB(query);
     }
     public Map<String, Double> getCountOfContactsByCity() {
-        String query = "SELECT city,COUNT(city) as count from addressBook group by city;";
+        String query = "SELECT city,COUNT(city) as count from addressbook group by city;";
         Map<String, Double> countOfContacts = new HashMap<>();
         try (Connection connection = this.getConnection()) {
             statement = connection.createStatement();
@@ -124,7 +125,7 @@ public class AddressBookDataBaseService
         return countOfContacts;
     }
     public Map<String, Double> getCountOfContactsByState() {
-        String query = "SELECT state,COUNT(state) as count from addressBook group by state;";
+        String query = "SELECT state,COUNT(state) as count from addressbook group by state;";
         Map<String, Double> countOfContacts = new HashMap<>();
         try (Connection connection = this.getConnection()) {
             statement = connection.createStatement();
@@ -138,5 +139,38 @@ public class AddressBookDataBaseService
             e.printStackTrace();
         }
         return countOfContacts;
+    }
+    public AddressBookData addNewContact(String type, String firstName, String lastName, String mobileNumber,
+                                         String email, String city, String state, String zip, LocalDate localDate) {
+        Connection connection = null;
+        AddressBookData addressBookData=null;
+        try {
+            connection = this.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try (Statement statement = connection.createStatement()) {
+            String sql = String.format("INSERT INTO addressbook (`type`,`firstName`,`lastName`,`mobileNumber`,`email`,`city`,`state`,`zip`,`date_added`) " +
+                            " VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+                    type,firstName,lastName,mobileNumber,email,city,state,zip,Date.valueOf(localDate));
+            System.out.println(sql+" sql");
+            int rowAffected = statement.executeUpdate(sql);
+            if (rowAffected == 1) {
+                addressBookData = new AddressBookData(type,firstName,lastName,mobileNumber,email,city,state,zip,localDate);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return addressBookData;
     }
 }
