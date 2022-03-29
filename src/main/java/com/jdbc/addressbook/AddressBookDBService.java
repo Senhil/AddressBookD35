@@ -1,5 +1,6 @@
 package com.jdbc.addressbook;
 
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +30,13 @@ public class AddressBookDBService
         return connection;
     }
 
-    public List<AddressBookData> readDate() {
+    public List<com.addressbook.jdbc.AddressBookData> readDate() {
         String query = "SELECT * from addressBook";
         return this.getAddressBookDataUsingDB(query);
     }
 
-    private List<AddressBookData> getAddressBookDataUsingDB(String query) {
-        List<AddressBookData> addressBookList = new ArrayList<>();
+    private List<com.addressbook.jdbc.AddressBookData> getAddressBookDataUsingDB(String query) {
+        List<com.addressbook.jdbc.AddressBookData> addressBookList = new ArrayList<>();
         try (Connection connection = this.getConnection()) {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
@@ -46,8 +47,8 @@ public class AddressBookDBService
         return addressBookList;
     }
 
-    private List<AddressBookData> getAddressBookData(ResultSet resultSet) {
-        List<AddressBookData> addressBookList = new ArrayList<>();
+    private List<com.addressbook.jdbc.AddressBookData> getAddressBookData(ResultSet resultSet) {
+        List<com.addressbook.jdbc.AddressBookData> addressBookList = new ArrayList<>();
         try {
             while (resultSet.next()) {
                 String typeId = resultSet.getString("type");
@@ -58,12 +59,11 @@ public class AddressBookDBService
                 String city = resultSet.getString("city");
                 String state = resultSet.getString("state");
                 String zip = resultSet.getString("zip");
-                addressBookList.add(new AddressBookData(typeId, firstName, lastName, phoneNumber, email, city, state, zip));
+                addressBookList.add(new com.addressbook.jdbc.AddressBookData(typeId, firstName, lastName, phoneNumber, email, city, state, zip));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return addressBookList;
     }
-
 }
