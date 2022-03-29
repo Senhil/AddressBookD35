@@ -1,4 +1,4 @@
-package com.addressbook.jdbc;
+package com.jdbc.addressbook;
 
 import java.util.Objects;
 
