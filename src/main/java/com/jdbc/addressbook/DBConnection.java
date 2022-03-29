@@ -16,7 +16,7 @@ public class DBConnection {
             Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println("Driver loaded!");
         } catch (ClassNotFoundException e) {
-            throw new IllegalStateException("Cannot find the driver in the classpath",e);
+            throw new IllegalStateException("Cannot find the driver in the classpath", e);
         }
         listDrivers();
         try {
@@ -27,6 +27,7 @@ public class DBConnection {
             e.printStackTrace();
         }
     }
+
     private static void listDrivers() {
         Enumeration<Driver> driverList = DriverManager.getDrivers();
         while (driverList.hasMoreElements()) {
@@ -34,5 +35,5 @@ public class DBConnection {
             System.out.println(driverClass.getClass().getName());
         }
     }
-
 }
+
